@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <title>Quotegrab</title>
+        <style>
+                body {
+                        font-family: monospace;
+                        font-size: 14pt;
+                        max-width: 40em;
+                        color: #222222;
+                }
+
+                p {
+                        background-color: #eeeeee;
+                }
+        </style>
+</head>
+<body>
+        <div class="grab">
+        </div>
+        <script type="text/javascript">
+                const title = document.querySelector('title');
+                const grab = document.querySelector('.grab');
+                fetch(window.location.pathname + '.json').then(r => {
+                        return r.json()
+                }.then(r => {
+                        title.innerHTML = `${r.author}'s grab`;
+                        const messages = document.createElement('p');
+                        for (const m of r.messages) {
+                                messages.appendChild(document.createTextNode(`
+                                        <${m.nick}>  ${m.message}
+                                `));
+                                messages.appendChild(document.createElement('br'));
+                        }
+                        grab.innerHTML = `
+                                <h4>Author: ${r.author}</h4> 
+                                <h4>Channel: ${r.channel}</h4> 
+                                <h4>Date: ${new Date(r.time).toLocaleString()}</h4> 
+                        `;
+                        grab.appendChild(messages);
+                });
+        </script>
+</body>
+</html>
